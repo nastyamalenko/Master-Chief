@@ -2,10 +2,10 @@ package org.masterchief;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -36,19 +36,26 @@ public class StartActivity extends AppCompatActivity implements OnTaskCompleteLi
      */
     private static final int UI_ANIMATION_DELAY = 300;
     private final Handler delayHandler = new Handler();
-    private View mContentView;
-    private AsyncTaskManager mAsyncTaskManager;
-
-    private final Runnable startLoadingRunnable = new Runnable() {
-        @SuppressLint("InlinedApi")
+    private final Runnable mShowPart2Runnable = new Runnable() {
         @Override
         public void run() {
-//                    Handle task that can be retained before
-            mAsyncTaskManager.setupTask(new LogonTask(getResources()));
-            mAsyncTaskManager.handleRetainedTask(getLastNonConfigurationInstance());
+            // Delayed display of UI elements
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.show();
+            }
+
         }
     };
+    private final Runnable mHideRunnable = new Runnable() {
+        @Override
+        public void run() {
+            hide();
 
+
+        }
+    };
+    private View mContentView;
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
         @Override
@@ -67,25 +74,14 @@ public class StartActivity extends AppCompatActivity implements OnTaskCompleteLi
 
         }
     };
-
-    private final Runnable mShowPart2Runnable = new Runnable() {
+    private AsyncTaskManager mAsyncTaskManager;
+    private final Runnable startLoadingRunnable = new Runnable() {
+        @SuppressLint("InlinedApi")
         @Override
         public void run() {
-            // Delayed display of UI elements
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.show();
-            }
-
-        }
-    };
-
-    private final Runnable mHideRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hide();
-
-
+//                    Handle task that can be retained before
+            mAsyncTaskManager.setupTask(new LogonTask(getResources()));
+            mAsyncTaskManager.handleRetainedTask(getLastNonConfigurationInstance());
         }
     };
 
@@ -144,6 +140,11 @@ public class StartActivity extends AppCompatActivity implements OnTaskCompleteLi
     public void onTaskComplete(LogonTask task) {
         Intent intent = new Intent(this, CategoryActivity.class);
         startActivity(intent);
+    }
 
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        this.finish();
     }
 }

@@ -4,4 +4,8 @@
     <string name="main_page">Main</string>
     <string name="enjoy_cooking">Enjoy cooking!</string>
     <string name="master_chief">Master-Chief</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="complexity">Complexity:</string>
+    <string name="time_minutes">min</string>
 </resources>

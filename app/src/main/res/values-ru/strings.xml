@@ -2,5 +2,10 @@
 <resources>
     <string name="app_name">МастерШеф</string>
     <string name="main_page">Главная</string>
-    <string name="master_chief"></string>
+    <string name="master_chief">Мастер Шеф</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="enjoy_cooking">Готовим вместе!</string>
+    <string name="complexity">Сложность:</string>
+    <string name="time_minutes">мин</string>
 </resources>

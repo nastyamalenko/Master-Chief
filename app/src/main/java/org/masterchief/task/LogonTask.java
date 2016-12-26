@@ -69,7 +69,7 @@ public class LogonTask extends AsyncTask<Void, String, Boolean> {
         // Working in separate thread
         for (int i = 0; i <100; )
         {
-            i=i+10;
+            i=i+20;
             // Check if task is cancelled
             if (isCancelled()) {
                 // This return causes onPostExecute call on UI thread
@@ -79,7 +79,7 @@ public class LogonTask extends AsyncTask<Void, String, Boolean> {
             try {
                 // This call causes onProgressUpdate call on UI thread
                 publishProgress(""+i);
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 // This return causes onPostExecute call on UI thread

@@ -1,6 +1,6 @@
 package org.masterchief.service;
 
-import org.masterchief.food.FoodCategory;
+import org.masterchief.model.FoodCategory;
 
 import java.util.List;
 

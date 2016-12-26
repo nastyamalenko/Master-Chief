@@ -1,6 +1,7 @@
-package org.masterchief.food;
+package org.masterchief.model.adapter;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,32 +10,36 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.masterchief.R;
+import org.masterchief.model.FoodCategory;
 
-@Deprecated
-public class FoodTypeAdapter extends BaseAdapter {
+import java.util.List;
+
+/**
+ * Created by nastya.symon on 14.12.2016.
+ */
+
+public class FoodCategoryAdapter extends BaseAdapter {
 
     private Context mContext;
-    private static final FoodType[] FOOD_TYPES = new FoodType[]{new FoodType("dessert", R.drawable.dessert), new FoodType("drink", R.drawable.drink),
-            new FoodType("main_dish", R.drawable.main_dish), new FoodType("salad", R.drawable.salad), new FoodType("snack", R.drawable.snack), new FoodType("soup", R.drawable.soup)};
 
 
-    public FoodTypeAdapter(Context context) {
+    private List<FoodCategory> categories;
+
+
+    public FoodCategoryAdapter(Context context, List<FoodCategory> categories) {
         this.mContext = context;
+        this.categories = categories;
     }
 
-
-    private FoodType[] getFoodTypes() {
-        return new FoodType[]{};
-    }
 
     @Override
     public int getCount() {
-        return FOOD_TYPES.length;
+        return categories.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return FOOD_TYPES[position];
+        return categories.get(position);
     }
 
     @Override
@@ -55,13 +60,22 @@ public class FoodTypeAdapter extends BaseAdapter {
             grid = convertView;
         }
 
+        FoodCategory category = categories.get(position);
+
+        TextView categoryIdTV = (TextView) grid.findViewById(R.id.category_id);
+        categoryIdTV.setText(category.getId());
+
+        TextView categoryNameTV = (TextView) grid.findViewById(R.id.category_name);
+        categoryNameTV.setText(category.getName());
+
+
         ImageView imageView = (ImageView) grid.findViewById(R.id.category_image);
-        TextView textView = (TextView) grid.findViewById(R.id.category_name);
-        imageView.setImageResource(FOOD_TYPES[position].getImageRef());
-        textView.setText(FOOD_TYPES[position].getName());
+        imageView.setImageBitmap(BitmapFactory.decodeByteArray(category.getImage(), 0, category.getImage().length));
+
 
         return grid;
     }
 
 
 }
+

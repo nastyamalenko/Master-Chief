@@ -1,5 +1,7 @@
 package org.masterchief.food;
 
+
+@Deprecated
 public class FoodType {
 
     private String name;
