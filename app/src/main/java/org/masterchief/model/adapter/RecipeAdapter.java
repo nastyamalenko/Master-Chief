@@ -73,7 +73,7 @@ public class RecipeAdapter extends BaseAdapter {
         View layout = grid.findViewById(R.id.recipe_item_layout);
 
         TextView recipeItemName = (TextView) layout.findViewById(R.id.recipe_item_name);
-        recipeItemName.setText(recipe.getName());
+        recipeItemName.setText(new String(recipe.getName()));
 
 
         View recipeItemTimeLayout = layout.findViewById(R.id.recipe_item_time_layout);

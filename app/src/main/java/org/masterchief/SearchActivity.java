@@ -9,7 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-public class SearchActivity extends ToolbarActivity {
+public class SearchActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +17,11 @@ public class SearchActivity extends ToolbarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+
+    }
+
+    @Override
+    public void loadData() {
         Spinner dishTypeSpinner = (Spinner) findViewById(R.id.dish_type_spinner);
         String[] items = new String[]{"Chai Latte", "Green Tea", "Black Tea"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,

@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class Recipe {
 
     private String id;
-    private String name;
+    private byte[] name;
     private Integer complexity;
     private Integer cookingTimeInMinutes;
     //    private CookingMethod cookingMethod;
@@ -29,11 +29,11 @@ public class Recipe {
         this.id = id;
     }
 
-    public String getName() {
+    public byte[] getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(byte[] name) {
         this.name = name;
     }
 
@@ -81,7 +81,7 @@ public class Recipe {
     public String toString() {
         return "Recipe{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + new String(name) + '\'' +
                 ", complexity=" + complexity +
                 ", cookingTimeInMinutes=" + cookingTimeInMinutes +
                 ", servingsCount=" + servingsCount +

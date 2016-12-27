@@ -1,10 +1,7 @@
 package org.masterchief;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,27 +18,23 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RecipeActivity extends AppCompatActivity {
+public class RecipeActivity extends BaseActivity {
 
     private static final String LOGGER_TAG = RecipeActivity.class.getSimpleName();
-    private Context context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-        context = this;
-        Intent intent = getIntent();
+    }
 
-        String categoryName = intent.getStringExtra("CATEGORY_NAME");
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.demo_toolbar);
-        myToolbar.setTitle(categoryName);
-        setSupportActionBar(myToolbar);
-
-        String categoryId = intent.getStringExtra("CATEGORY_ID");
+    @Override
+    public void loadData() {
         final ListView recipesListView = (ListView) findViewById(R.id.recipes_list);
-
         RecipeService recipeService = RetrofitHelper.getRecipeService();
+        Intent intent = getIntent();
+        String categoryId = intent.getStringExtra("CATEGORY_ID");
         Call<List<Recipe>> recipesByCategoryId = recipeService.getRecipesByCategoryId(Long.valueOf(categoryId));
         recipesByCategoryId.enqueue(new Callback<List<Recipe>>() {
             @Override
@@ -70,5 +63,16 @@ public class RecipeActivity extends AppCompatActivity {
                 Log.e(LOGGER_TAG, t.getMessage());
             }
         });
+    }
+
+    @Override
+    protected String getToolbarTitle() {
+        Intent intent = getIntent();
+        String toolbarTitle = intent.getStringExtra("TOOLBAR_TITLE");
+        if (toolbarTitle!=null){
+            return toolbarTitle;
+        }
+        return "";
+
     }
 }

@@ -3,6 +3,10 @@
     package="org.masterchief">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Needed to check when the network connection changes -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+
 
     <application
         android:allowBackup="true"
@@ -24,13 +28,25 @@
         </activity>
         <activity android:name=".CategoryActivity" />
         <activity android:name=".RecipeActivity" />
-        <activity android:name=".SearchActivity"
-            android:parentActivityName=".CategoryActivity" >
+        <activity
+            android:name=".SearchActivity"
+            android:parentActivityName=".CategoryActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".CategoryActivity" />
         </activity>
+
+        <!-- Receiver registration in manifest -->
+        <receiver android:name=".network.NetworkStateReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
+
+
+
+
 
 </manifest>

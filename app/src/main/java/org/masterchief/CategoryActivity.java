@@ -20,41 +20,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CategoryActivity extends ToolbarActivity {
+public class CategoryActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
-
-        final GridView gridview = (GridView) findViewById(R.id.category_grid_view);
-        CategoryService demoService = RetrofitHelper.getCategoryService();
-        final Call<List<FoodCategory>> categories = demoService.loadCategories();
-        categories.enqueue(new Callback<List<FoodCategory>>() {
-            @Override
-            public void onResponse(Call<List<FoodCategory>> call, Response<List<FoodCategory>> response) {
-                if (response.isSuccessful()) {
-                    gridview.setAdapter(new FoodCategoryAdapter(context, response.body()));
-                    gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            View childView = gridview.getChildAt(position);
-                            Intent intent = new Intent(context, RecipeActivity.class);
-                            intent.putExtra("CATEGORY_ID", ((TextView) childView.findViewById(R.id.category_id)).getText());
-                            intent.putExtra("CATEGORY_NAME", ((TextView) childView.findViewById(R.id.category_name)).getText());
-                            startActivity(intent);
-                        }
-                    });
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<List<FoodCategory>> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
-
     }
 
 
@@ -72,7 +43,44 @@ public class CategoryActivity extends ToolbarActivity {
 
 
     @Override
-    public String getToolbarTitle() {
+    public void loadData() {
+        final GridView gridview = (GridView) findViewById(R.id.category_grid_view);
+        CategoryService demoService = RetrofitHelper.getCategoryService();
+        final Call<List<FoodCategory>> categories = demoService.loadCategories();
+        categories.enqueue(new Callback<List<FoodCategory>>() {
+            @Override
+            public void onResponse(Call<List<FoodCategory>> call, Response<List<FoodCategory>> response) {
+                if (response.isSuccessful()) {
+                    gridview.setAdapter(new FoodCategoryAdapter(context, response.body()));
+                    gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            View childView = gridview.getChildAt(position);
+                            Intent intent = new Intent(context, RecipeActivity.class);
+                            intent.putExtra("CATEGORY_ID", ((TextView) childView.findViewById(R.id.category_id)).getText());
+                            intent.putExtra("TOOLBAR_TITLE", ((TextView) childView.findViewById(R.id.category_name)).getText());
+                            startActivity(intent);
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<FoodCategory>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    @Override
+    protected String getToolbarTitle() {
         return getResources().getString(R.string.main_page);
     }
+
+    @Override
+    protected boolean displayHomeButton() {
+        return false;
+    }
+
 }

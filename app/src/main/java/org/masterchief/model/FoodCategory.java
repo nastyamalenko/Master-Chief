@@ -7,23 +7,23 @@ package org.masterchief.model;
 public class FoodCategory {
 
     private String id;
-    private String name;
+    private byte[] name;
     private byte[] image;
 
     public FoodCategory() {
     }
 
-    public FoodCategory(String id, String name, byte[] image) {
+    public FoodCategory(String id, byte[] name, byte[] image) {
         this.id = id;
         this.name = name;
         this.image = image;
     }
 
-    public String getName() {
+    public byte[] getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(byte[] name) {
         this.name = name;
     }
 

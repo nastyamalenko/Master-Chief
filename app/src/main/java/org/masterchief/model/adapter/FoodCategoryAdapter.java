@@ -12,6 +12,7 @@ import android.widget.TextView;
 import org.masterchief.R;
 import org.masterchief.model.FoodCategory;
 
+import java.nio.charset.Charset;
 import java.util.List;
 
 /**
@@ -66,7 +67,7 @@ public class FoodCategoryAdapter extends BaseAdapter {
         categoryIdTV.setText(category.getId());
 
         TextView categoryNameTV = (TextView) grid.findViewById(R.id.category_name);
-        categoryNameTV.setText(category.getName());
+        categoryNameTV.setText(new String(category.getName()));
 
 
         ImageView imageView = (ImageView) grid.findViewById(R.id.category_image);
