@@ -21,4 +21,7 @@ public interface CategoryService {
 
     @GET("v1/categories")
     Call<List<FoodCategory>> loadCategories();
+
+    @GET("v1/categories")
+    Call<List<Object>> loadObjects();
 }

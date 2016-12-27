@@ -1,18 +1,20 @@
 package org.masterchief;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.masterchief.helper.RetrofitHelper;
+import org.masterchief.model.CookingStep;
+import org.masterchief.model.Ingredient;
 import org.masterchief.model.Recipe;
-import org.masterchief.model.adapter.RecipeAdapter;
 import org.masterchief.service.RecipeService;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,7 +23,7 @@ import retrofit2.Response;
 public class RecipeActivity extends BaseActivity {
 
     private static final String LOGGER_TAG = RecipeActivity.class.getSimpleName();
-
+    private Recipe recipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,48 +33,71 @@ public class RecipeActivity extends BaseActivity {
 
     @Override
     public void loadData() {
-        final ListView recipesListView = (ListView) findViewById(R.id.recipes_list);
-        RecipeService recipeService = RetrofitHelper.getRecipeService();
+
+        final LinearLayout layout = (LinearLayout) findViewById(R.id.activity_recipe_inner);
+
+//        final ImageView imageView = (ImageView) layout.findViewById(R.id.recipe_detail_image);
+//        final ListView ingredientsLV = (ListView) layout.findViewById(R.id.recipe_detail_ingredients_list);
+//        final ListView cookingStepsLV = (ListView) layout.findViewById(R.id.recipe_detail_cooking_steps_list);
+
         Intent intent = getIntent();
-        String categoryId = intent.getStringExtra("CATEGORY_ID");
-        Call<List<Recipe>> recipesByCategoryId = recipeService.getRecipesByCategoryId(Long.valueOf(categoryId));
-        recipesByCategoryId.enqueue(new Callback<List<Recipe>>() {
-            @Override
-            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                if (response.body() != null) {
+        String recipeId = intent.getStringExtra("RECIPE_ID");
 
-                    recipesListView.setAdapter(new RecipeAdapter(context, response.body()));
-                    recipesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            //TODO: Recipe Detail Activity
+        if (recipeId != null) {
+            RecipeService recipeService = RetrofitHelper.getRecipeService();
+            Call<Recipe> recipeCall = recipeService.getRecipeById(recipeId);
+            recipeCall.enqueue(new Callback<Recipe>() {
+                @Override
+                public void onResponse(Call<Recipe> call, Response<Recipe> response) {
+                    recipe = response.body();
+                    getSupportActionBar().setTitle(new String(recipe.getName()));
+                    ImageView imageView = new ImageView(context);
+                    imageView.setImageBitmap(BitmapFactory.decodeByteArray(recipe.getImage(), 0, recipe.getImage().length));
+                    imageView.setAdjustViewBounds(true);
+                    layout.addView(imageView);
 
-//                            View childView = recipesListView.getChildAt(position);
-//                            Intent intent = new Intent(context, RecipeActivity.class);
-//                            intent.putExtra("CATEGORY_ID", ((TextView) childView.findViewById(R.id.category_id)).getText());
-//                            intent.putExtra("CATEGORY_NAME", ((TextView) childView.findViewById(R.id.category_name)).getText());
-//                            startActivity(intent);
-                        }
-                    });
+                    TextView iLabel = new TextView(context);
+                    iLabel.setText(R.string.ingredients);
+                    iLabel.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    iLabel.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    iLabel.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
+                    layout.addView(iLabel);
+
+                    for (Ingredient ingredient : recipe.getIngredients()) {
+                        TextView tv = new TextView(context);
+                        tv.setText(new String(ingredient.getName()));
+                        layout.addView(tv);
+                    }
+
+
+                    TextView csLabel = new TextView(context);
+                    csLabel.setText(R.string.cooking_steps);
+                    csLabel.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    csLabel.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    iLabel.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
+                    layout.addView(csLabel);
+
+                    for (CookingStep cookingStep : recipe.getCookingSteps()) {
+                        TextView tv = new TextView(context);
+                        tv.setText(new String(cookingStep.getName()));
+                        layout.addView(tv);
+                    }
+//                    ingredientsLV.setAdapter(new IngredientAdapter(context, recipe.getIngredients()));
+//                    cookingStepsLV.setAdapter(new CookingStepAdapter(context, recipe.getCookingSteps()));
 
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                Log.e(LOGGER_TAG, t.getMessage());
-            }
-        });
-    }
-
-    @Override
-    protected String getToolbarTitle() {
-        Intent intent = getIntent();
-        String toolbarTitle = intent.getStringExtra("TOOLBAR_TITLE");
-        if (toolbarTitle!=null){
-            return toolbarTitle;
+                @Override
+                public void onFailure(Call<Recipe> call, Throwable t) {
+                    Log.e(LOGGER_TAG, t.getMessage());
+                }
+            });
         }
-        return "";
 
     }
+
+//    @Override
+//    protected String getToolbarTitle() {
+//        return new String(recipe.getName());
+//    }
 }

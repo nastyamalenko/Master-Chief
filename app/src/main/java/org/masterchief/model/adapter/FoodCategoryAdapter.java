@@ -64,7 +64,7 @@ public class FoodCategoryAdapter extends BaseAdapter {
         FoodCategory category = categories.get(position);
 
         TextView categoryIdTV = (TextView) grid.findViewById(R.id.category_id);
-        categoryIdTV.setText(category.getId());
+        categoryIdTV.setText(String.valueOf(category.getId()));
 
         TextView categoryNameTV = (TextView) grid.findViewById(R.id.category_name);
         categoryNameTV.setText(new String(category.getName()));

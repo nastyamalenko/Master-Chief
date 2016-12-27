@@ -46,6 +46,18 @@ public class CategoryActivity extends BaseActivity {
     public void loadData() {
         final GridView gridview = (GridView) findViewById(R.id.category_grid_view);
         CategoryService demoService = RetrofitHelper.getCategoryService();
+//        final Call<List<Object>> categories = demoService.loadObjects();
+//        categories.enqueue(new Callback<List<Object>>() {
+//            @Override
+//            public void onResponse(Call<List<Object>> call, Response<List<Object>> response) {
+//                System.out.println(response.body());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Object>> call, Throwable t) {
+//                t.printStackTrace();
+//            }
+//        });
         final Call<List<FoodCategory>> categories = demoService.loadCategories();
         categories.enqueue(new Callback<List<FoodCategory>>() {
             @Override
@@ -56,7 +68,7 @@ public class CategoryActivity extends BaseActivity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             View childView = gridview.getChildAt(position);
-                            Intent intent = new Intent(context, RecipeActivity.class);
+                            Intent intent = new Intent(context, RecipesActivity.class);
                             intent.putExtra("CATEGORY_ID", ((TextView) childView.findViewById(R.id.category_id)).getText());
                             intent.putExtra("TOOLBAR_TITLE", ((TextView) childView.findViewById(R.id.category_name)).getText());
                             startActivity(intent);

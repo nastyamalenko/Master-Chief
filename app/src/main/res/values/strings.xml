@@ -9,4 +9,6 @@
     <string name="no">ні</string>
     <string name="complexity">Складність:</string>
     <string name="time_minutes">хв</string>
+    <string name="ingredients">Інгридієнти</string>
+    <string name="cooking_steps">Кроки приготування</string>
 </resources>

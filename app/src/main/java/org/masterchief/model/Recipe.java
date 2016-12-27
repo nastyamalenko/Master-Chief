@@ -2,6 +2,7 @@ package org.masterchief.model;
 
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Recipe {
 
@@ -15,7 +16,9 @@ public class Recipe {
 
     private FoodCategory category;
 
-    //    private List<CookingStep> cookingSteps;
+    private Cuisine cuisine;
+    private List<Ingredient> ingredients;
+    private List<CookingStep> cookingSteps;
     private byte[] image;
 
     public Recipe() {
@@ -75,6 +78,30 @@ public class Recipe {
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    public Cuisine getCuisine() {
+        return cuisine;
+    }
+
+    public void setCuisine(Cuisine cuisine) {
+        this.cuisine = cuisine;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public List<CookingStep> getCookingSteps() {
+        return cookingSteps;
+    }
+
+    public void setCookingSteps(List<CookingStep> cookingSteps) {
+        this.cookingSteps = cookingSteps;
     }
 
     @Override

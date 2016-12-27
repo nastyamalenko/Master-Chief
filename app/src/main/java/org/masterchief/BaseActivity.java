@@ -52,7 +52,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IDataLoa
     }
 
     protected boolean displayHomeButton() {
-        return true;
+        return false;
     }
 
     protected String getToolbarTitle() {

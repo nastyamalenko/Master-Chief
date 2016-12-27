@@ -1,19 +1,24 @@
 package org.masterchief.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by nastya.symon on 14.12.2016.
  */
 
 public class FoodCategory {
 
-    private String id;
+//    @SerializedName("id")
+    private Long id;
+//    @SerializedName("name")
     private byte[] name;
+//    @SerializedName("image")
     private byte[] image;
 
     public FoodCategory() {
     }
 
-    public FoodCategory(String id, byte[] name, byte[] image) {
+    public FoodCategory(Long id, byte[] name, byte[] image) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -35,11 +40,11 @@ public class FoodCategory {
         this.image = image;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }
