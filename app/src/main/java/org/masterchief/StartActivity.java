@@ -138,7 +138,7 @@ public class StartActivity extends AppCompatActivity implements OnTaskCompleteLi
 
     @Override
     public void onTaskComplete(LogonTask task) {
-        Intent intent = new Intent(this, CategoryActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 

@@ -10,4 +10,6 @@
     <string name="time_minutes">хв</string>
     <string name="ingredients">Інгридієнти</string>
     <string name="cooking_steps">Кроки приготування</string>
+    <string name="settings">Налаштування</string>
+    <string name="about">О нас</string>
 </resources>

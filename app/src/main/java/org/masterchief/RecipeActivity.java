@@ -1,15 +1,21 @@
 package org.masterchief;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.masterchief.database.MasterChiefDBHelper;
+import org.masterchief.database.MasterChiefRecipe;
 import org.masterchief.helper.RetrofitHelper;
 import org.masterchief.model.CookingStep;
 import org.masterchief.model.Ingredient;
@@ -96,8 +102,43 @@ public class RecipeActivity extends BaseActivity {
 
     }
 
-//    @Override
-//    protected String getToolbarTitle() {
-//        return new String(recipe.getName());
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        boolean onCreateOptionsMenu = super.onCreateOptionsMenu(menu);
+        MenuItem addToFavorite = menu.findItem(R.id.action_add_favorite);
+        if (addToFavorite != null) {
+            addToFavorite.setVisible(true);
+        }
+        return onCreateOptionsMenu && true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add_favorite:
+                saveRecipeAsFavorite();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+
+    }
+
+    private void saveRecipeAsFavorite() {
+        MasterChiefDBHelper dbHelper = new MasterChiefDBHelper(context);
+        // Gets the data repository in write mode
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+// Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_ID, recipe.getId());
+        values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_NAME, recipe.getName());
+        values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_COMPLEXITY, recipe.getComplexity());
+        values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_COOKING_TIME, recipe.getCookingTimeInMinutes());
+        values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_IMAGE, recipe.getImage());
+
+// Insert the new row, returning the primary key value of the new row
+        db.insert(MasterChiefRecipe.RecipeEntry.TABLE_NAME, null, values);
+    }
 }

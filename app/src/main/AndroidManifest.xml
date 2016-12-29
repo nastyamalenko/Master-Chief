@@ -22,27 +22,27 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
         </activity>
-        <activity android:name=".CategoryActivity" />
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".RecipesActivity"
-            android:parentActivityName=".CategoryActivity">
+            android:parentActivityName=".MainActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".CategoryActivity" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".SearchActivity"
-            android:parentActivityName=".CategoryActivity">
-
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".CategoryActivity" />
+                android:value=".MainActivity" />
         </activity>
-
+        <activity android:name=".RecipeActivity" />
         <!-- Receiver registration in manifest -->
         <receiver android:name=".network.NetworkStateReceiver">
             <intent-filter>
@@ -50,7 +50,19 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".RecipeActivity"></activity>
+
+        <receiver android:name=".widget.MasterChiefWidget" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/master_chief_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".widget.ListViewWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
     </application>
 
 </manifest>

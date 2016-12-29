@@ -40,8 +40,8 @@ public class RecipesActivity extends BaseActivity {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 if (response.body() != null) {
-
-                    recipesListView.setAdapter(new RecipeAdapter(context, response.body()));
+                    final RecipeAdapter recipeAdapter = new RecipeAdapter(context, response.body());
+                    recipesListView.setAdapter(recipeAdapter);
                     recipesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -49,7 +49,7 @@ public class RecipesActivity extends BaseActivity {
 
 //                            View childView = recipesListView.getChildAt(position);
                             Intent intent = new Intent(context, RecipeActivity.class);
-                            intent.putExtra("RECIPE_ID", "1");
+                            intent.putExtra("RECIPE_ID", String.valueOf(recipeAdapter.getItemId(position)));
                             startActivity(intent);
                         }
                     });

@@ -8,4 +8,6 @@
     <string name="no">No</string>
     <string name="complexity">Complexity:</string>
     <string name="time_minutes">min</string>
+    <string name="about">About us</string>
+    <string name="settings">Settings</string>
 </resources>

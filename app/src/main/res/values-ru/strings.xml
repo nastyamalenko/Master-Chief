@@ -8,4 +8,6 @@
     <string name="enjoy_cooking">Готовим вместе!</string>
     <string name="complexity">Сложность:</string>
     <string name="time_minutes">мин</string>
+    <string name="about">О нас</string>
+    <string name="settings">Настройки</string>
 </resources>

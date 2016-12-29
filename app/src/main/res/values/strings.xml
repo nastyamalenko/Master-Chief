@@ -2,13 +2,13 @@
     <string name="app_name">MasterChief</string>
     <string name="enjoy_cooking">Enjoy cooking!</string>
     <string name="master_chief">Master-Chief</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="main_page">Main</string>
+    <string name="main_page">Головна</string>
     <string name="yes">Так</string>
     <string name="no">ні</string>
     <string name="complexity">Складність:</string>
     <string name="time_minutes">хв</string>
     <string name="ingredients">Інгридієнти</string>
     <string name="cooking_steps">Кроки приготування</string>
+    <string name="settings">Налаштування</string>
+    <string name="about">О нас</string>
 </resources>

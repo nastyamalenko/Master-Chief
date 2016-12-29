@@ -81,7 +81,11 @@ public abstract class BaseActivity extends AppCompatActivity implements IDataLoa
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.category_activity_menu, menu);
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        MenuItem addToFavorite = menu.findItem(R.id.action_add_favorite);
+        if (addToFavorite != null) {
+            addToFavorite.setVisible(false);
+        }
         return true;
     }
 

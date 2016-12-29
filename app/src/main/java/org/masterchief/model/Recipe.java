@@ -10,7 +10,7 @@ public class Recipe {
     private byte[] name;
     private Integer complexity;
     private Integer cookingTimeInMinutes;
-    //    private CookingMethod cookingMethod;
+    private CookingMethod cookingMethod;
     /* количество порций */
     private Integer servingsCount;
 
@@ -102,6 +102,14 @@ public class Recipe {
 
     public void setCookingSteps(List<CookingStep> cookingSteps) {
         this.cookingSteps = cookingSteps;
+    }
+
+    public CookingMethod getCookingMethod() {
+        return cookingMethod;
+    }
+
+    public void setCookingMethod(CookingMethod cookingMethod) {
+        this.cookingMethod = cookingMethod;
     }
 
     @Override
