@@ -13,10 +13,7 @@ public class LogonTask extends AsyncTask<Void, String, Boolean> {
 
     /* UI Thread */
     public LogonTask(Resources resources) {
-        // Keep reference to resources
-//        mResources = resources;
-        // Initialise initial pre-execute message
-        mProgressMessage = "0";//resources.getString(com.mnm.asynctaskmanager.R.string.task_starting);
+        mProgressMessage = "0";
     }
 
     /* UI Thread */

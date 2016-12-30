@@ -29,6 +29,13 @@ public abstract class BaseActivity extends AppCompatActivity implements IDataLoa
         context = this;
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -56,7 +63,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IDataLoa
     }
 
     protected String getToolbarTitle() {
-        return "Toolbar title may be here";
+        return "";
     }
 
 
@@ -64,7 +71,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IDataLoa
         toolbar = (Toolbar) findViewById(R.id.demo_toolbar);
         if (toolbar != null) {
             if (useToolbar()) {
-                toolbar.setTitle(getToolbarTitle());
+//                toolbar.setTitle(getToolbarTitle());
                 setSupportActionBar(toolbar);
                 if (displayHomeButton) {
                     getSupportActionBar().setHomeButtonEnabled(true);
@@ -82,9 +89,14 @@ public abstract class BaseActivity extends AppCompatActivity implements IDataLoa
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        /* по-умолчанию спряем все элементы */
         MenuItem addToFavorite = menu.findItem(R.id.action_add_favorite);
         if (addToFavorite != null) {
             addToFavorite.setVisible(false);
+        }
+        MenuItem actionSearch = menu.findItem(R.id.action_search);
+        if (actionSearch != null) {
+            actionSearch.setVisible(false);
         }
         return true;
     }

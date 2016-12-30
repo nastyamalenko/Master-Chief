@@ -1,25 +1,37 @@
 package org.masterchief;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import org.masterchief.fragment.FragmentAbout;
 import org.masterchief.fragment.FragmentCategory;
-import org.masterchief.fragment.FragmentSettings;
+import org.masterchief.fragment.FragmentFavoriteRecipes;
+import org.masterchief.helper.RetrofitHelper;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static org.masterchief.RecipeActivity.EXTRA_RECIPE_ID;
 
 public class MainActivity extends BaseActivity {
 
+    private static final String LOGGER_TAG = MainActivity.class.getName();
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
+    private FragmentManager fragmentManager;
+    private CharSequence toolbarTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +40,16 @@ public class MainActivity extends BaseActivity {
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.demo_toolbar);
-        setSupportActionBar(toolbar);
-
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        fragmentManager = getSupportFragmentManager();
+        if (savedInstanceState == null) {
+            fragmentManager.beginTransaction().replace(R.id.flContent, new FragmentCategory()).commit();
+        }
+        setSupportActionBar(toolbar);
         setupDrawerContent(nvDrawer);
-        selectDrawerItem(null);
+
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -52,25 +67,26 @@ public class MainActivity extends BaseActivity {
         // Create a new fragment and specify the fragment to show based on nav item clicked
         Fragment fragment = null;
         Class fragmentClass = null;
-        if (menuItem != null) {
-            switch (menuItem.getItemId()) {
-                case R.id.home_fragment:
-                    fragmentClass = FragmentCategory.class;
-                    break;
-                case R.id.settings_fragment:
-                    fragmentClass = FragmentSettings.class;
-                    break;
-                case R.id.about:
-                    fragmentClass = FragmentAbout.class;
-                    break;
-                default:
-                    fragmentClass = FragmentCategory.class;
-            }
-            menuItem.setChecked(true);
-        } else {
-            fragmentClass = FragmentCategory.class;
+        switch (menuItem.getItemId()) {
+            case R.id.home_fragment:
+                fragmentClass = FragmentCategory.class;
+                break;
+            case R.id.favorite_fragment:
+                fragmentClass = FragmentFavoriteRecipes.class;
+                break;
+            case R.id.random_recipe:
+                mDrawer.closeDrawers();
+                randomRecipe();
+                return;
+            case R.id.about:
+                fragmentClass = FragmentAbout.class;
+                break;
+            default:
+                fragmentClass = FragmentCategory.class;
         }
-
+        menuItem.setChecked(true);
+        toolbarTitle = menuItem.getTitle();
+        getSupportActionBar().setTitle(toolbarTitle);
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
@@ -79,11 +95,34 @@ public class MainActivity extends BaseActivity {
         }
 
         // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
+
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
 
         // Close the navigation drawer
         mDrawer.closeDrawers();
+    }
+
+    private void randomRecipe() {
+
+
+        final Call<Long> randomRecipeId = RetrofitHelper.getRecipeService().getRandomRecipeId();
+        randomRecipeId.enqueue(new Callback<Long>() {
+            @Override
+            public void onResponse(Call<Long> call, Response<Long> response) {
+                if (response.body() != null) {
+                    Intent intent = new Intent(context, RecipeActivity.class);
+                    intent.putExtra(EXTRA_RECIPE_ID, String.valueOf(response.body()));
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Long> call, Throwable t) {
+                Log.e(LOGGER_TAG, t.getMessage());
+            }
+        });
+
     }
 
     @Override
@@ -105,7 +144,10 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected String getToolbarTitle() {
-        return getResources().getString(R.string.main_page);
+        if (toolbarTitle == null) {
+            toolbarTitle = getResources().getString(R.string.main_page);
+        }
+        return toolbarTitle.toString();
     }
 
     @Override
@@ -114,15 +156,12 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // The action bar home/up action should open or close the drawer.
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawer.openDrawer(GravityCompat.START);
-                return true;
+    public boolean onCreateOptionsMenu(Menu menu) {
+        boolean b = super.onCreateOptionsMenu(menu);
+        MenuItem actionSearch = menu.findItem(R.id.action_search);
+        if (actionSearch != null) {
+            actionSearch.setVisible(true);
         }
-
-        return super.onOptionsItemSelected(item);
+        return b && true;
     }
-
 }

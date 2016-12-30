@@ -12,7 +12,7 @@ import android.widget.TextView;
 import org.masterchief.R;
 import org.masterchief.model.FoodCategory;
 
-import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,9 +27,9 @@ public class FoodCategoryAdapter extends BaseAdapter {
     private List<FoodCategory> categories;
 
 
-    public FoodCategoryAdapter(Context context, List<FoodCategory> categories) {
+    public FoodCategoryAdapter(Context context) {
         this.mContext = context;
-        this.categories = categories;
+        this.categories = new ArrayList<>();
     }
 
 
@@ -51,7 +51,6 @@ public class FoodCategoryAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View grid;
-
         if (convertView == null) {
             grid = new View(mContext);
             //LayoutInflater inflater = getLayoutInflater();
@@ -78,5 +77,8 @@ public class FoodCategoryAdapter extends BaseAdapter {
     }
 
 
+    public void setData(List<FoodCategory> categories) {
+        this.categories = categories;
+    }
 }
 

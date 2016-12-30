@@ -1,6 +1,8 @@
 package org.masterchief.task;
 
+import android.os.AsyncTask;
+
 public interface OnTaskCompleteListener {
 
-    void onTaskComplete(LogonTask task);
+    void onTaskComplete(AsyncTask task);
 }

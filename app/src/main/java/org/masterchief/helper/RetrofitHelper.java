@@ -1,6 +1,7 @@
 package org.masterchief.helper;
 
 import org.masterchief.service.CategoryService;
+import org.masterchief.service.DictionaryService;
 import org.masterchief.service.RecipeService;
 
 import java.util.concurrent.TimeUnit;
@@ -36,6 +37,10 @@ public class RetrofitHelper {
 
     public static RecipeService getRecipeService(){
         return getRetrofit().create(RecipeService.class);
+    }
+
+    public static DictionaryService getDictionaryService(){
+        return getRetrofit().create(DictionaryService.class);
     }
 
 

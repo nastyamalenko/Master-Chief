@@ -21,6 +21,7 @@ import org.masterchief.model.CookingStep;
 import org.masterchief.model.Ingredient;
 import org.masterchief.model.Recipe;
 import org.masterchief.service.RecipeService;
+import org.masterchief.widget.MasterChiefWidget;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,8 +29,11 @@ import retrofit2.Response;
 
 public class RecipeActivity extends BaseActivity {
 
+    public static final String EXTRA_RECIPE_ID = "RECIPE_ID";
+    public static final String EXTRA_FROM_WIDGET = "FROM_WIDGET";
     private static final String LOGGER_TAG = RecipeActivity.class.getSimpleName();
     private Recipe recipe;
+    private boolean fromWidget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +45,10 @@ public class RecipeActivity extends BaseActivity {
     public void loadData() {
 
         final LinearLayout layout = (LinearLayout) findViewById(R.id.activity_recipe_inner);
-
-//        final ImageView imageView = (ImageView) layout.findViewById(R.id.recipe_detail_image);
-//        final ListView ingredientsLV = (ListView) layout.findViewById(R.id.recipe_detail_ingredients_list);
-//        final ListView cookingStepsLV = (ListView) layout.findViewById(R.id.recipe_detail_cooking_steps_list);
-
+        layout.removeAllViews();
         Intent intent = getIntent();
-        String recipeId = intent.getStringExtra("RECIPE_ID");
+        String recipeId = intent.getStringExtra(EXTRA_RECIPE_ID);
+        fromWidget = intent.getBooleanExtra(EXTRA_FROM_WIDGET, false);
 
         if (recipeId != null) {
             RecipeService recipeService = RetrofitHelper.getRecipeService();
@@ -57,10 +58,14 @@ public class RecipeActivity extends BaseActivity {
                 public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                     recipe = response.body();
                     getSupportActionBar().setTitle(new String(recipe.getName()));
-                    ImageView imageView = new ImageView(context);
-                    imageView.setImageBitmap(BitmapFactory.decodeByteArray(recipe.getImage(), 0, recipe.getImage().length));
-                    imageView.setAdjustViewBounds(true);
-                    layout.addView(imageView);
+
+                    if (recipe.getImage() != null) {
+                        ImageView imageView = new ImageView(context);
+                        imageView.setImageBitmap(BitmapFactory.decodeByteArray(recipe.getImage(), 0, recipe.getImage().length));
+                        imageView.setAdjustViewBounds(true);
+                        layout.addView(imageView);
+                    }
+
 
                     TextView iLabel = new TextView(context);
                     iLabel.setText(R.string.ingredients);
@@ -105,10 +110,19 @@ public class RecipeActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean onCreateOptionsMenu = super.onCreateOptionsMenu(menu);
-        MenuItem addToFavorite = menu.findItem(R.id.action_add_favorite);
-        if (addToFavorite != null) {
-            addToFavorite.setVisible(true);
+
+        if (!fromWidget) {
+            MenuItem addToFavorite = menu.findItem(R.id.action_add_favorite);
+            if (addToFavorite != null) {
+                addToFavorite.setVisible(true);
+            }
+
+            MenuItem actionSearch = menu.findItem(R.id.action_search);
+            if (actionSearch != null) {
+                actionSearch.setVisible(true);
+            }
         }
+
         return onCreateOptionsMenu && true;
     }
 
@@ -117,6 +131,7 @@ public class RecipeActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.action_add_favorite:
                 saveRecipeAsFavorite();
+                MasterChiefWidget.updateWidget(getBaseContext());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -128,17 +143,18 @@ public class RecipeActivity extends BaseActivity {
     private void saveRecipeAsFavorite() {
         MasterChiefDBHelper dbHelper = new MasterChiefDBHelper(context);
         // Gets the data repository in write mode
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try (SQLiteDatabase db = dbHelper.getWritableDatabase()) {
 
-// Create a new map of values, where column names are the keys
-        ContentValues values = new ContentValues();
-        values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_ID, recipe.getId());
-        values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_NAME, recipe.getName());
-        values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_COMPLEXITY, recipe.getComplexity());
-        values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_COOKING_TIME, recipe.getCookingTimeInMinutes());
-        values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_IMAGE, recipe.getImage());
+            // Create a new map of values, where column names are the keys
+            ContentValues values = new ContentValues();
+            values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_ID, recipe.getId());
+            values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_NAME, recipe.getName());
+            values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_COMPLEXITY, recipe.getComplexity());
+            values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_COOKING_TIME, recipe.getCookingTimeInMinutes());
+            values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_IMAGE, recipe.getImage());
 
-// Insert the new row, returning the primary key value of the new row
-        db.insert(MasterChiefRecipe.RecipeEntry.TABLE_NAME, null, values);
+            // Insert the new row, returning the primary key value of the new row
+            db.insert(MasterChiefRecipe.RecipeEntry.TABLE_NAME, null, values);
+        }
     }
 }

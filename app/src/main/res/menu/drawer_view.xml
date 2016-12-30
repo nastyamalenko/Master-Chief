@@ -8,9 +8,14 @@
             android:icon="@drawable/ic_home_black_24dp"
             android:title="@string/main_page" />
         <item
-            android:id="@+id/settings_fragment"
-            android:icon="@drawable/ic_settings_black_24dp"
-            android:title="@string/settings" />
+            android:id="@+id/favorite_fragment"
+            android:icon="@drawable/ic_favorite_black_24dp"
+            android:title="@string/favorite" />
+
+        <item
+            android:id="@+id/random_recipe"
+            android:icon="@drawable/ic_whatshot_black_24dp"
+            android:title="@string/random" />
         <item
             android:id="@+id/about"
             android:icon="@drawable/ic_info_black_24dp"

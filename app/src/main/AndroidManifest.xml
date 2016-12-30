@@ -43,6 +43,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity android:name=".RecipeActivity" />
+
         <!-- Receiver registration in manifest -->
         <receiver android:name=".network.NetworkStateReceiver">
             <intent-filter>
@@ -54,6 +55,7 @@
         <receiver android:name=".widget.MasterChiefWidget" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.example.android.stackwidget.TOAST_ACTION" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/master_chief_widget_info" />

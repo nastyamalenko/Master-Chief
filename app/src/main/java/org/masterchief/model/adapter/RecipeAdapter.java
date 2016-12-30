@@ -27,9 +27,7 @@ public class RecipeAdapter extends BaseAdapter {
     public RecipeAdapter(Context context, List<Recipe> recipes) {
         this.mContext = context;
         this.recipes = recipes;
-        for (Recipe recipe : recipes) {
-            System.out.println(recipe);
-        }
+
     }
 
 
@@ -63,9 +61,10 @@ public class RecipeAdapter extends BaseAdapter {
 
         Recipe recipe = recipes.get(position);
 
-
-        ImageView imageView = (ImageView) grid.findViewById(R.id.recipe_item_image);
-        imageView.setImageBitmap(BitmapFactory.decodeByteArray(recipe.getImage(), 0, recipe.getImage().length));
+        if (recipe.getImage() != null) {
+            ImageView imageView = (ImageView) grid.findViewById(R.id.recipe_item_image);
+            imageView.setImageBitmap(BitmapFactory.decodeByteArray(recipe.getImage(), 0, recipe.getImage().length));
+        }
 
         TextView recipeItemId = (TextView) grid.findViewById(R.id.recipe_item_id);
         recipeItemId.setText(recipe.getId());
@@ -81,7 +80,8 @@ public class RecipeAdapter extends BaseAdapter {
         recipeItemTime.setText(String.valueOf(recipe.getCookingTimeInMinutes()));
 
 
-        LinearLayout linearLayoutComplexity = (LinearLayout) layout.findViewById(R.id.recipe_item_complexity_layout);
+        LinearLayout linearLayoutComplexity = (LinearLayout) layout.findViewById(R.id.recipe_item_stars_layout);
+        linearLayoutComplexity.removeAllViews();
         for (int i = 0; i < recipe.getComplexity(); i++) {
             ImageView complexityStar = new ImageView(mContext);
             complexityStar.setImageResource(R.drawable.ic_star_grey_600_18dp);
@@ -91,4 +91,7 @@ public class RecipeAdapter extends BaseAdapter {
     }
 
 
+    public List<Recipe> getRecipes() {
+        return recipes;
+    }
 }

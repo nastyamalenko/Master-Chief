@@ -3,6 +3,8 @@ package org.masterchief;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -17,6 +19,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static org.masterchief.RecipeActivity.EXTRA_RECIPE_ID;
 
 public class RecipesActivity extends BaseActivity {
 
@@ -45,11 +49,8 @@ public class RecipesActivity extends BaseActivity {
                     recipesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            //TODO: Recipe Detail Activity
-
-//                            View childView = recipesListView.getChildAt(position);
                             Intent intent = new Intent(context, RecipeActivity.class);
-                            intent.putExtra("RECIPE_ID", String.valueOf(recipeAdapter.getItemId(position)));
+                            intent.putExtra(EXTRA_RECIPE_ID, String.valueOf(recipeAdapter.getItemId(position)));
                             startActivity(intent);
                         }
                     });
@@ -73,5 +74,15 @@ public class RecipesActivity extends BaseActivity {
         }
         return "";
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        boolean b = super.onCreateOptionsMenu(menu);
+        MenuItem actionSearch = menu.findItem(R.id.action_search);
+        if (actionSearch != null) {
+            actionSearch.setVisible(true);
+        }
+        return b && true;
     }
 }

@@ -2,6 +2,7 @@ package org.masterchief;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
@@ -137,7 +138,7 @@ public class StartActivity extends AppCompatActivity implements OnTaskCompleteLi
     }
 
     @Override
-    public void onTaskComplete(LogonTask task) {
+    public void onTaskComplete(AsyncTask task) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

@@ -16,4 +16,7 @@ public interface RecipeService {
 
     @GET("v1/recipes/{recipeId}")
     Call<Recipe> getRecipeById(@Path("recipeId") String recipeId);
+
+    @GET("v1/recipes/random")
+    Call<Long> getRandomRecipeId();
 }
