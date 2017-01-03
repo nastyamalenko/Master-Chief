@@ -128,6 +128,7 @@ public class FragmentFavoriteRecipes extends BaseFragment {
         String selection = MasterChiefRecipe.RecipeEntry.COLUMN_NAME_ID + " LIKE ?";
         // Specify arguments in placeholder order.
 
+
         String[] selectionArgs = {String.valueOf(itemId)};
         try (SQLiteDatabase db = dbHelper.getWritableDatabase()) {
             db.delete(MasterChiefRecipe.RecipeEntry.TABLE_NAME, selection, selectionArgs);

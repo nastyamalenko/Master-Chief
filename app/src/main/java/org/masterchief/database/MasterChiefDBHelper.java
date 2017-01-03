@@ -17,6 +17,14 @@ public class MasterChiefDBHelper extends SQLiteOpenHelper {
     private static final String BLOB_TYPE = " BLOB";
     private static final String COMMA_SEP = ",";
 
+    public static final String[] FULL_TABLE_PROJECTION = {
+            MasterChiefRecipe.RecipeEntry.COLUMN_NAME_ID,
+            MasterChiefRecipe.RecipeEntry.COLUMN_NAME_NAME,
+            MasterChiefRecipe.RecipeEntry.COLUMN_NAME_COMPLEXITY,
+            MasterChiefRecipe.RecipeEntry.COLUMN_NAME_COOKING_TIME,
+            MasterChiefRecipe.RecipeEntry.COLUMN_NAME_IMAGE
+    };
+
     private static final String SQL_CREATE_ENTRIES = "CREATE TABLE " + MasterChiefRecipe.RecipeEntry.TABLE_NAME + " (" +
             MasterChiefRecipe.RecipeEntry._ID + INT_TYPE + " PRIMARY KEY," +
             MasterChiefRecipe.RecipeEntry.COLUMN_NAME_ID + TEXT_TYPE + COMMA_SEP +

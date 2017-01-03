@@ -14,8 +14,10 @@ import org.masterchief.R;
 import org.masterchief.model.Dictionary;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 
 public class ExpAdapter extends BaseExpandableListAdapter {
@@ -28,13 +30,19 @@ public class ExpAdapter extends BaseExpandableListAdapter {
     private GroupViewHolder groupViewHolder;
 
     // Hashmap for keeping track of our checkbox check states
-    private HashMap<Integer, boolean[]> mChildCheckStates;
+    private HashMap<Dictionary, List<Dictionary>> checkedStates;
+//    private boolean[][] checkedState;
 
     public ExpAdapter(Context context, HashMap<Dictionary, List<Dictionary>> dictionaryHashMap) {
         this.mContext = context;
         dicts = new ArrayList<>(dictionaryHashMap.size());
+        checkedStates = new HashMap<>(dictionaryHashMap.size());
+
         for (Dictionary dictionary : dictionaryHashMap.keySet()) {
+            System.out.println(dictionary);
             dicts.add(new Dict(dictionary, dictionaryHashMap.get(dictionary)));
+            checkedStates.put(dictionary, new ArrayList<Dictionary>());
+
         }
     }
 
@@ -50,12 +58,12 @@ public class ExpAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Object getGroup(int groupPosition) {
-        return dicts.get(groupPosition);
+    public Dictionary getGroup(int groupPosition) {
+        return dicts.get(groupPosition).getD();
     }
 
     @Override
-    public Object getChild(int groupPosition, int childPosition) {
+    public Dictionary getChild(int groupPosition, int childPosition) {
         return dicts.get(groupPosition).getItems().get(childPosition);
     }
 
@@ -71,7 +79,7 @@ public class ExpAdapter extends BaseExpandableListAdapter {
 
     @Override
     public boolean hasStableIds() {
-        return false;
+        return true;
     }
 
     @Override
@@ -91,8 +99,8 @@ public class ExpAdapter extends BaseExpandableListAdapter {
 
             groupViewHolder = (GroupViewHolder) convertView.getTag();
         }
-        groupViewHolder.mGroupText.setText(new String(((Dict) getGroup(groupPosition)).getD().getName()));
-
+        groupViewHolder.mGroupText.setText(new String(getGroup(groupPosition).getName()));
+        groupViewHolder = null;
         return convertView;
 
     }
@@ -111,11 +119,13 @@ public class ExpAdapter extends BaseExpandableListAdapter {
 
             childViewHolder = new ChildViewHolder();
 
+
             childViewHolder.mChildText = (TextView) convertView
                     .findViewById(R.id.childname);
 
             childViewHolder.mCheckBox = (CheckBox) convertView
                     .findViewById(R.id.check1);
+
 
             convertView.setTag(R.layout.expandable_row, childViewHolder);
 
@@ -125,7 +135,7 @@ public class ExpAdapter extends BaseExpandableListAdapter {
                     .getTag(R.layout.expandable_row);
         }
 
-        childViewHolder.mChildText.setText(new String(((Dictionary)getChild(groupPosition, childPosition)).getName()));
+        childViewHolder.mChildText.setText(new String(getChild(mGroupPosition, mChildPosition).getName()));
 
 		/*
          * You have to set the onCheckChangedListener to null
@@ -135,36 +145,12 @@ public class ExpAdapter extends BaseExpandableListAdapter {
 		*/
         childViewHolder.mCheckBox.setOnCheckedChangeListener(null);
 
-        if (mChildCheckStates.containsKey(mGroupPosition)) {
-			/*
-			 * if the hashmap mChildCheckStates<Integer, Boolean[]> contains
-			 * the value of the parent view (group) of this child (aka, the key),
-			 * then retrive the boolean array getChecked[]
-			*/
-            boolean getChecked[] = mChildCheckStates.get(mGroupPosition);
-
-            // set the check state of this position's checkbox based on the
-            // boolean value of getChecked[position]
-            childViewHolder.mCheckBox.setChecked(getChecked[mChildPosition]);
-
+        if (checkedStates.get(getGroup(mGroupPosition)).contains(getChild(mGroupPosition, mChildPosition))) {
+            childViewHolder.mCheckBox.setChecked(true);
         } else {
-
-			/*
-			 * if the hashmap mChildCheckStates<Integer, Boolean[]> does not
-			 * contain the value of the parent view (group) of this child (aka, the key),
-			 * (aka, the key), then initialize getChecked[] as a new boolean array
-			 *  and set it's size to the total number of children associated with
-			 *  the parent group
-			*/
-            boolean getChecked[] = new boolean[getChildrenCount(mGroupPosition)];
-
-            // add getChecked[] to the mChildCheckStates hashmap using mGroupPosition as the key
-            mChildCheckStates.put(mGroupPosition, getChecked);
-
-            // set the check state of this position's checkbox based on the
-            // boolean value of getChecked[position]
             childViewHolder.mCheckBox.setChecked(false);
         }
+
 
         childViewHolder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -172,26 +158,54 @@ public class ExpAdapter extends BaseExpandableListAdapter {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (isChecked) {
-
-                    boolean getChecked[] = mChildCheckStates.get(mGroupPosition);
-                    getChecked[mChildPosition] = isChecked;
-                    mChildCheckStates.put(mGroupPosition, getChecked);
-
+                    checkedStates.get(getGroup(mGroupPosition)).add(getChild(mGroupPosition, mChildPosition));
                 } else {
-
-                    boolean getChecked[] = mChildCheckStates.get(mGroupPosition);
-                    getChecked[mChildPosition] = isChecked;
-                    mChildCheckStates.put(mGroupPosition, getChecked);
+                    checkedStates.get(getGroup(mGroupPosition)).remove(getChild(mGroupPosition, mChildPosition));
                 }
             }
         });
+
 
         return convertView;
     }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
+        return true;
+    }
+
+    public List<Dictionary> getFoodCategoryCheckedStates() {
+        for (Dictionary dictionary : checkedStates.keySet()) {
+            if (Dictionary.FOOD_CATEGORY.equals(dictionary.getId())) {
+                return checkedStates.get(dictionary);
+            }
+
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+    public List<Dictionary> getCookingMethodCheckedStates() {
+        for (Dictionary dictionary : checkedStates.keySet()) {
+            if (Dictionary.COOKING_METHOD.equals(dictionary.getId())) {
+                return checkedStates.get(dictionary);
+            }
+
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+    public List<Dictionary> getCuisineCheckedStates() {
+        for (Dictionary dictionary : checkedStates.keySet()) {
+            if (Dictionary.CUISINE.equals(dictionary.getId())) {
+                return checkedStates.get(dictionary);
+            }
+
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+    public HashMap<Dictionary, List<Dictionary>> getCheckedStates() {
+        return checkedStates;
     }
 
     public final class GroupViewHolder {
@@ -230,6 +244,13 @@ public class ExpAdapter extends BaseExpandableListAdapter {
         public void setItems(List<Dictionary> items) {
             this.items = items;
         }
-    }
 
+        @Override
+        public int hashCode() {
+            int hash = 5;
+            hash = 97 * hash + Objects.hashCode(d);
+            hash = 97 * hash + Objects.hashCode(items);
+            return hash;
+        }
+    }
 }

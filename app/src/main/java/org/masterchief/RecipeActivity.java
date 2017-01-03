@@ -2,6 +2,7 @@ package org.masterchief;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -145,16 +146,31 @@ public class RecipeActivity extends BaseActivity {
         // Gets the data repository in write mode
         try (SQLiteDatabase db = dbHelper.getWritableDatabase()) {
 
-            // Create a new map of values, where column names are the keys
-            ContentValues values = new ContentValues();
-            values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_ID, recipe.getId());
-            values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_NAME, recipe.getName());
-            values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_COMPLEXITY, recipe.getComplexity());
-            values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_COOKING_TIME, recipe.getCookingTimeInMinutes());
-            values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_IMAGE, recipe.getImage());
 
-            // Insert the new row, returning the primary key value of the new row
-            db.insert(MasterChiefRecipe.RecipeEntry.TABLE_NAME, null, values);
+            String selection = MasterChiefRecipe.RecipeEntry.COLUMN_NAME_ID + " LIKE ?";
+            String[] selectionArgs = {recipe.getId()};
+
+            Cursor c = db.query(MasterChiefRecipe.RecipeEntry.TABLE_NAME,  // The table to query
+                    MasterChiefDBHelper.FULL_TABLE_PROJECTION,      // The columns to return
+                    selection,                                // The columns for the WHERE clause
+                    selectionArgs,                            // The values for the WHERE clause
+                    null,                                     // don't group the rows
+                    null,                                     // don't filter by row groups
+                    null                                 // The sort order
+            );
+            if (c != null && c.getCount() == 0) {
+                // Create a new map of values, where column names are the keys
+                ContentValues values = new ContentValues();
+                values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_ID, recipe.getId());
+                values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_NAME, recipe.getName());
+                values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_COMPLEXITY, recipe.getComplexity());
+                values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_COOKING_TIME, recipe.getCookingTimeInMinutes());
+                values.put(MasterChiefRecipe.RecipeEntry.COLUMN_NAME_IMAGE, recipe.getImage());
+
+                // Insert the new row, returning the primary key value of the new row
+                db.insert(MasterChiefRecipe.RecipeEntry.TABLE_NAME, null, values);
+            }
+            c.close();
         }
     }
 }

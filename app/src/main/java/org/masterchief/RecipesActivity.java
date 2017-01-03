@@ -1,6 +1,7 @@
 package org.masterchief;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,53 +15,43 @@ import org.masterchief.model.Recipe;
 import org.masterchief.model.adapter.RecipeAdapter;
 import org.masterchief.service.RecipeService;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static org.masterchief.RecipeActivity.EXTRA_RECIPE_ID;
 
 public class RecipesActivity extends BaseActivity {
 
     private static final String LOGGER_TAG = RecipesActivity.class.getSimpleName();
+    private List<Recipe> recipes;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipes);
+        this.recipes = new ArrayList<>();
+
     }
 
     @Override
     public void loadData() {
+        recipes.clear();
+        new GetRecipes().execute();
+    }
+
+    private void setupListView(final RecipeAdapter recipeAdapter) {
         final ListView recipesListView = (ListView) findViewById(R.id.recipes_list);
-        RecipeService recipeService = RetrofitHelper.getRecipeService();
-        Intent intent = getIntent();
-        String categoryId = intent.getStringExtra("CATEGORY_ID");
-        Call<List<Recipe>> recipesByCategoryId = recipeService.getRecipesByCategoryId(Long.valueOf(categoryId));
-        recipesByCategoryId.enqueue(new Callback<List<Recipe>>() {
+        recipesListView.setAdapter(recipeAdapter);
+        recipesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                if (response.body() != null) {
-                    final RecipeAdapter recipeAdapter = new RecipeAdapter(context, response.body());
-                    recipesListView.setAdapter(recipeAdapter);
-                    recipesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Intent intent = new Intent(context, RecipeActivity.class);
-                            intent.putExtra(EXTRA_RECIPE_ID, String.valueOf(recipeAdapter.getItemId(position)));
-                            startActivity(intent);
-                        }
-                    });
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                Log.e(LOGGER_TAG, t.getMessage());
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(context, RecipeActivity.class);
+                intent.putExtra(EXTRA_RECIPE_ID, String.valueOf(recipeAdapter.getItemId(position)));
+                startActivity(intent);
             }
         });
     }
@@ -84,5 +75,45 @@ public class RecipesActivity extends BaseActivity {
             actionSearch.setVisible(true);
         }
         return b && true;
+    }
+
+
+    private class GetRecipes extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            try {
+                load();
+            } catch (IOException e) {
+                Log.e(LOGGER_TAG, e.getMessage());
+            }
+            return null;
+        }
+
+        protected void load() throws IOException {
+            RecipeService recipeService = RetrofitHelper.getRecipeService();
+            Intent intent = getIntent();
+            String categoryId = intent.getStringExtra("CATEGORY_ID");
+            String[] recipesIds = intent.getStringArrayExtra("RECIPES_IDS");
+            if (categoryId != null) {
+                final Call<List<Recipe>> recipesCall = recipeService.getRecipesByCategoryId(Long.valueOf(categoryId));
+                recipes = recipesCall.execute().body();
+            } else if (recipesIds != null) {
+                for (String recipeId : recipesIds) {
+                    Call<Recipe> recipeCall = recipeService.getRecipeById(recipeId);
+                    recipes.add(recipeCall.execute().body());
+                }
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            setupListView(new RecipeAdapter(context, recipes));
+        }
     }
 }
