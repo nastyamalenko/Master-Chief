@@ -33,8 +33,8 @@ public class NetworkStateReceiver extends BroadcastReceiver {
                 }
             } else {
                 Log.i("APP_TAG", "NOT CONNECTED TO INTERNET");
-                new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert).setTitle("No Internet access")
-                        .setMessage("No Internet access. Reload?")
+                new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert).setTitle(R.string.no_network)
+                        .setMessage(R.string.reload)
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -45,8 +45,8 @@ public class NetworkStateReceiver extends BroadcastReceiver {
             }
         } else {
             Log.i("APP_TAG", "NO NETWORK");
-            new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert).setTitle("NO NETWORK")
-                    .setMessage("No Internet access. Reload?")
+            new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert).setTitle(R.string.no_network)
+                    .setMessage(R.string.reload)
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

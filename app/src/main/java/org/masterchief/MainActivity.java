@@ -127,8 +127,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Hide")
-                .setMessage("Hide application. Are you sure?")
+        new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle(R.string.hide)
+                .setMessage(R.string.hide_shure)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -162,6 +162,6 @@ public class MainActivity extends BaseActivity {
         if (actionSearch != null) {
             actionSearch.setVisible(true);
         }
-        return b && true;
+        return b;
     }
 }

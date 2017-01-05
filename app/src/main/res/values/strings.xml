@@ -1,17 +1,26 @@
 <resources>
-    <string name="app_name">MasterChief</string>
-    <string name="enjoy_cooking">Enjoy cooking!</string>
-    <string name="master_chief">Master-Chief</string>
+    <string name="app_name">МастерШеф</string>
     <string name="main_page">Головна</string>
     <string name="yes">Так</string>
-    <string name="no">ні</string>
+    <string name="no">Ні</string>
+    <string name="master_chief">Мастер Шеф</string>
+    <string name="enjoy_cooking">Готуємо разом!</string>
     <string name="complexity">Складність:</string>
     <string name="time_minutes">хв</string>
-    <string name="ingredients">Інгридієнти</string>
+    <string name="ingredients">Інгредієнти</string>
     <string name="cooking_steps">Кроки приготування</string>
     <string name="settings">Налаштування</string>
-    <string name="about">О нас</string>
-    <string name="search_hint">Введіть назву страви або інгридієнти</string>
+    <string name="about">Про нас</string>
+    <string name="search_hint">Введіть назву страви або інгредієнти</string>
     <string name="favorite">Улюблене</string>
     <string name="random">Що приготувати?</string>
+    <string name="servingsCount">Кількість порцій:</string>
+    <string name="no_network">Відсутнє підключення до інтернету</string>
+    <string name="reload">Спробувати ще раз?</string>
+    <string name="hide">Вихід</string>
+    <string name="hide_shure">Ви впевнені, що бажаєте закрити застосування?</string>
+    <string name="addLike">Додано до улюблених!</string>
+    <string name="search">Пошук</string>
+    <string name="notFound">За вашим запитом нічого не знайдено!</string>
+    <string name="noFavorite">Улюблені рецепти відсутні</string>
 </resources>

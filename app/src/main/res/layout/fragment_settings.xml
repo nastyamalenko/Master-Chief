@@ -7,6 +7,6 @@
     tools:context=".fragment.FragmentSettings">
 
     <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="Oooops! Not implemented yet." />
+        android:text="@string/notFound" />
 
 </LinearLayout>

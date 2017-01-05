@@ -22,7 +22,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="4dp"
-        android:text="No favorite recipes" />
+        android:text="@string/noFavorite" />
 
 
 </RelativeLayout>

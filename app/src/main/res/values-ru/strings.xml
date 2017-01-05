@@ -2,12 +2,26 @@
 <resources>
     <string name="app_name">МастерШеф</string>
     <string name="main_page">Главная</string>
-    <string name="master_chief">Мастер Шеф</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="master_chief">Мастер Шеф</string>
     <string name="enjoy_cooking">Готовим вместе!</string>
     <string name="complexity">Сложность:</string>
     <string name="time_minutes">мин</string>
-    <string name="about">О нас</string>
+    <string name="ingredients">Ингредиенты</string>
+    <string name="cooking_steps">Шаги приготовления</string>
     <string name="settings">Настройки</string>
+    <string name="about">О нас</string>
+    <string name="search_hint">Введите название блюда или ингредиенты</string>
+    <string name="favorite">Избранное</string>
+    <string name="random">Что приготовить?</string>
+    <string name="servingsCount">Количество порций:</string>
+    <string name="no_network">Отсутствует подключение к интернету</string>
+    <string name="reload">Попробовать еще раз?</string>
+    <string name="hide">Выход</string>
+    <string name="hide_shure">Вы уверены, что хотите закрыть приложение?</string>
+    <string name="addLike">Добавлено в избранные!</string>
+    <string name="search">Поиск</string>
+    <string name="notFound">По вашему запросу ничего не найдено!</string>
+    <string name="noFavorite">Избранные рецепты отсутствуют</string>
 </resources>
