@@ -24,4 +24,6 @@
     <string name="search">Поиск</string>
     <string name="notFound">По вашему запросу ничего не найдено!</string>
     <string name="noFavorite">Избранные рецепты отсутствуют</string>
+    <string name="delete">Удаление</string>
+    <string name="reallyDel">Вы действительно хотите удалить?</string>
 </resources>

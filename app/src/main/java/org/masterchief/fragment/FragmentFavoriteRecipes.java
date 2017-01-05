@@ -98,8 +98,8 @@ public class FragmentFavoriteRecipes extends BaseFragment {
         recipesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long id) {
-                new AlertDialog.Builder(getContext()).setIcon(android.R.drawable.ic_delete).setTitle("Видалення")
-                        .setMessage("Дійсно бажаєте видалити?")
+                new AlertDialog.Builder(getContext()).setIcon(android.R.drawable.ic_delete).setTitle(R.string.delete)
+                        .setMessage(R.string.reallyDel)
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

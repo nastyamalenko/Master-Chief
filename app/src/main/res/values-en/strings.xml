@@ -24,4 +24,6 @@
     <string name="search">Search</string>
     <string name="notFound">Oooops! Not implemented yet.</string>
     <string name="noFavorite">No favorite recipes</string>
+    <string name="delete">Delete</string>
+    <string name="reallyDel">Do you want to delete?</string>
 </resources>

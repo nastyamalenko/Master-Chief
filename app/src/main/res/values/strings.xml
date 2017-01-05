@@ -23,4 +23,6 @@
     <string name="search">Пошук</string>
     <string name="notFound">За вашим запитом нічого не знайдено!</string>
     <string name="noFavorite">Улюблені рецепти відсутні</string>
+    <string name="delete">Видалення</string>
+    <string name="reallyDel">Ви дійсно бажаєте видалити?</string>
 </resources>
