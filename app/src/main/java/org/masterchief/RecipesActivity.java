@@ -27,12 +27,17 @@ public class RecipesActivity extends BaseActivity {
 
     private static final String LOGGER_TAG = RecipesActivity.class.getSimpleName();
     private List<Recipe> recipes;
+    String categoryId;
+    String[] recipesIds;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipes);
+        Intent intent = getIntent();
+        categoryId = intent.getStringExtra("CATEGORY_ID");
+        recipesIds = intent.getStringArrayExtra("RECIPES_IDS");
         this.recipes = new ArrayList<>();
 
     }
@@ -96,9 +101,7 @@ public class RecipesActivity extends BaseActivity {
 
         protected void load() throws IOException {
             RecipeService recipeService = RetrofitHelper.getRecipeService();
-            Intent intent = getIntent();
-            String categoryId = intent.getStringExtra("CATEGORY_ID");
-            String[] recipesIds = intent.getStringArrayExtra("RECIPES_IDS");
+
             if (categoryId != null) {
                 final Call<List<Recipe>> recipesCall = recipeService.getRecipesByCategoryId(Long.valueOf(categoryId));
                 recipes = recipesCall.execute().body();
