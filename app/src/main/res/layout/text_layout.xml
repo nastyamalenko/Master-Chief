@@ -10,5 +10,5 @@
         android:layout_height="match_parent"
         android:gravity="right"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="12pt" />
+        android:textSize="11pt" />
 </LinearLayout>
