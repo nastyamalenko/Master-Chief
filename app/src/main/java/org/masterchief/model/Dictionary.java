@@ -1,10 +1,11 @@
 package org.masterchief.model;
 
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Dictionary {
+public class Dictionary implements Serializable {
 
     public static final Long FOOD_CATEGORY = 1L;
     public static final Long COOKING_METHOD = 2L;

@@ -44,15 +44,25 @@ public class FragmentCategory extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        categoryAdapter = new FoodCategoryAdapter(getContext());
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (gridview != null) {
+            /* save first visible position */
+            outState.putInt("firstViewPosition", gridview.getFirstVisiblePosition());
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         gridview = (GridView) view.findViewById(R.id.category_grid_view);
-        categoryAdapter = new FoodCategoryAdapter(getContext());
+
         mLoaderCallbacks = new LoaderManager.LoaderCallbacks<List<FoodCategory>>() {
             @Override
             public Loader<List<FoodCategory>> onCreateLoader(int id, Bundle args) {
@@ -81,6 +91,13 @@ public class FragmentCategory extends BaseFragment {
                 // Display our data, for instance updating our adapter
                 categoryAdapter.setData(data);
                 gridview.setAdapter(categoryAdapter);
+                if (savedInstanceState!=null){
+                    int lastPosition = savedInstanceState.getInt("firstViewPosition");
+                    if (data.size()>=lastPosition){
+                        gridview.setSelection(lastPosition);
+                    }
+
+                }
                 gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

@@ -80,5 +80,9 @@ public class FoodCategoryAdapter extends BaseAdapter {
     public void setData(List<FoodCategory> categories) {
         this.categories = categories;
     }
+
+    public List<FoodCategory> getData() {
+        return categories;
+    }
 }
 
